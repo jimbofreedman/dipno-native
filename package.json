@@ -1,8 +1,8 @@
 {
-  "homepage": "https://github.com/jimbofreedman/react-native-template",
-  "bugs": "https://github.com/jimbofreedman/react-native-template/issues",
+  "homepage": "https://github.com/jimbofreedman/dipno",
+  "bugs": "https://github.com/jimbofreedman/dipno/issues",
   "version": "0.0.1",
-  "description": "Jimbo Freedman's React Native app template",
+  "description": "Never Eat Alone",
   "keywords": [
     "react",
     "react-native",
@@ -10,14 +10,14 @@
     "eslint",
     "material-ui"
   ],
-  "licence": "MIT",
+  "licence": "None",
   "author": {
     "name": "Jimbo Freedman",
     "url": "https://github.com/jimbofreedman"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jimbofreedman/react-native-template.git"
+    "url": "https://github.com/jimbofreedman/dipno-native.git"
   },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -42,9 +42,11 @@
     "@react-navigation/web": "~1.0.0-alpha.9",
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
+    "expo-cli": "^3.20.1",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-web-browser": "~8.0.0",
+    "global": "^4.4.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
     "mobx-utils": "^5.5.3",
