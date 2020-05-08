@@ -5,9 +5,13 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Button, Text } from 'native-base';
+import { observer } from 'mobx-react'
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
+import useStores from './useStores';
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -18,11 +22,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function App(props) {
+export default observer(function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
+
+  const { authStore } = useStores();
 
   const { skipLoadingScreen } = props;
 
@@ -43,6 +49,8 @@ export default function App(props) {
           Roboto: require('native-base/Fonts/Roboto.ttf'),
           Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
         });
+
+        await authStore.checkLoggedIn();
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         // eslint-disable-next-line no-console
@@ -59,14 +67,23 @@ export default function App(props) {
   if (!isLoadingComplete && !skipLoadingScreen) {
     return null;
   }
+
+  console.log("checking logged in ", authStore.isLoggedIn);
+
+  const screen = authStore.isLoggedIn ? (
+      <Stack.Screen name="Root" component={BottomTabNavigator} />
+    ) : (
+    <Stack.Screen name="Login" component={LoginScreen} />
+    )
+
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
         <Stack.Navigator>
-          <Stack.Screen name="Root" component={BottomTabNavigator} />
-        </Stack.Navigator>
+          {screen}
+            </Stack.Navigator>
       </NavigationContainer>
     </View>
   );
-}
+});

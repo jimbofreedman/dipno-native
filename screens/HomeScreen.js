@@ -131,7 +131,7 @@ function DevelopmentModeNotice() {
 }
 
 function HomeScreen() {
-  const { timerStore } = useStores();
+  const { timerStore, authStore } = useStores();
 
   return (
     <View style={styles.container}>
@@ -160,6 +160,8 @@ function HomeScreen() {
           </View>
 
           <Button rounded light onPress={timerStore.resetTimer}><Text>{`Seconds passed: ${timerStore.timer}`}</Text></Button>
+          <Button rounded light onPress={authStore.logout}><Text>Logout</Text></Button>
+
         </View>
 
         <View style={styles.helpContainer}>
