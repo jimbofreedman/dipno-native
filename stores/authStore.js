@@ -4,6 +4,9 @@ import { AsyncStorage } from 'react-native';
 import { observable, action, computed } from 'mobx';
 import { now } from 'mobx-utils';
 
+import apiService from "../services/apiService";
+import storageService from '../services/storageService';
+
 export default class AuthStore {
   @observable facebookId = null;
 
@@ -13,8 +16,10 @@ export default class AuthStore {
 
   @observable facebookName = null;
 
+  @observable apiToken = null;
+
   @computed get isLoggedIn() {
-    return this.facebookId !== null;
+    return this.apiToken !== null;
   }
 
   constructor() {
@@ -57,16 +62,27 @@ export default class AuthStore {
         permissions: ['public_profile'],
       });
       if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        const data = await response.json();
-        console.log('Logged in!', `Hi ${data.name}!`);
-        console.log(data);
-        this.facebookId = data.id;
-        this.facebookName = data.name;
-        this.facebookToken = token;
-        this.facebookExpires = expires;
-        AsyncStorage.setItem('@dipno:facebookToken', token);
+        const apiToken = await apiService.convertToken({
+            "client_id": "yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq",
+            "client_secret": "n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq",
+            "grant_type": "convert_token",
+            "backend": "facebook",
+            "token": token
+          }
+        );
+        console.log("Logged in to API")
+        this.apiToken = apiToken.access_token;
+        console.log(await apiService.me(token));
+        // // Get the user's name using Facebook's Graph API
+        // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        // const data = await response.json();
+        // console.log('Logged in!', `Hi ${data.name}!`);
+        // console.log(data);
+        // this.facebookId = data.id;
+        // this.facebookName = data.name;
+        // this.facebookToken = token;
+        // this.facebookExpires = expires;
+        // AsyncStorage.setItem('@dipno:facebookToken', token);
       } else {
         // type === 'cancel'
       }
