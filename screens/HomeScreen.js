@@ -131,7 +131,12 @@ function DevelopmentModeNotice() {
 }
 
 function HomeScreen() {
-  const { timerStore, authStore } = useStores();
+  const { timerStore, authStore, userStore } = useStores();
+
+
+  userStore.loadAll()
+    .then(data => console.log(data))
+    .catch(error => { console.error(error.message )});
 
   return (
     <View style={styles.container}>

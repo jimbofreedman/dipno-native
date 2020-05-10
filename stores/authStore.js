@@ -19,6 +19,7 @@ export default class AuthStore {
   @observable apiToken = null;
 
   @computed get isLoggedIn() {
+    console.log('iLI', this.apiToken);
     return this.apiToken !== null;
   }
 
@@ -72,6 +73,8 @@ export default class AuthStore {
         );
         console.log("Logged in to API")
         this.apiToken = apiToken.access_token;
+        this.facebookToken = token;
+        console.log("FB Token:" ,this.facebookToken);
         console.log(await apiService.me(token));
         // // Get the user's name using Facebook's Graph API
         // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
