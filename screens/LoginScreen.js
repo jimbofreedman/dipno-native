@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
 import { observer } from 'mobx-react';
 
 import useStores from '../useStores';
-import { MonoText } from '../components/StyledText';
 
 const styles = StyleSheet.create({
   container: {

@@ -25,7 +25,7 @@ httpClient.interceptors.request.use(config => {
 
   if (finalChar === '?') {
     // eslint-disable-next-line no-param-reassign
-    config.url = config.url.slice(0, -1) + '/';
+    config.url = `${config.url.slice(0, -1)}/`;
   } else if (finalChar !== '/') {
     // eslint-disable-next-line no-param-reassign
     config.url += '/';

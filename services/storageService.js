@@ -1,10 +1,10 @@
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 class StorageService {
   constructor() {
     this.storage = AsyncStorage;
     this.token_key = '@dipno/apiToken';
-    this.form_key = '@dipno/search_form'
+    this.form_key = '@dipno/search_form';
   }
 
   getToken() {

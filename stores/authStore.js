@@ -2,10 +2,8 @@ import * as Facebook from 'expo-facebook';
 import { AsyncStorage } from 'react-native';
 
 import { observable, action, computed } from 'mobx';
-import { now } from 'mobx-utils';
 
-import apiService from "../services/apiService";
-import storageService from '../services/storageService';
+import apiService from '../services/apiService';
 
 export default class AuthStore {
   @observable facebookId = null;
@@ -24,10 +22,7 @@ export default class AuthStore {
 
   constructor() {
     Facebook.setAutoInitEnabledAsync(true).then(() => {
-
-      Facebook.initializeAsync('461460001330325').then(() => {
-
-      });
+      Facebook.initializeAsync('461460001330325').then(() => {});
     });
   }
 
@@ -38,7 +33,9 @@ export default class AuthStore {
       return false;
     }
 
-    const response = await fetch(`https://graph.facebook.com/me?access_token=${this.facebookToken}`);
+    const response = await fetch(
+      `https://graph.facebook.com/me?access_token=${this.facebookToken}`
+    );
     const data = await response.json();
     this.facebookId = data.id;
     this.facebookName = data.name;
@@ -52,27 +49,23 @@ export default class AuthStore {
       const {
         type,
         token,
-        expires,
+        /*        expires,
         permissions,
-        declinedPermissions,
+        declinedPermissions, */
       } = await Facebook.logInWithReadPermissionsAsync({
         permissions: ['public_profile'],
       });
       if (type === 'success') {
-        console.log("Logged into Facebook");
         const apiToken = await apiService.convertToken({
-            "client_id": "yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq",
-            "client_secret": "n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq",
-            "grant_type": "convert_token",
-            "backend": "facebook",
-            "token": token
-          }
-        );
-        console.log("Logged in to API")
+          client_id: 'yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq',
+          client_secret:
+            'n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq',
+          grant_type: 'convert_token',
+          backend: 'facebook',
+          token,
+        });
         this.apiToken = apiToken.access_token;
         this.facebookToken = token;
-        console.log("FB Token:" ,this.facebookToken);
-        console.log(await apiService.me(token));
         // // Get the user's name using Facebook's Graph API
         // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
         // const data = await response.json();
@@ -92,7 +85,6 @@ export default class AuthStore {
   }
 
   @action.bound async logout() {
-    console.log("Logging Out");
     this.facebookId = null;
     this.facebookName = null;
     await AsyncStorage.removeItem('@dipno:facebookToken');

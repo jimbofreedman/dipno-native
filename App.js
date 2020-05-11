@@ -5,8 +5,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Button, Text } from 'native-base';
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
@@ -46,7 +45,9 @@ export default observer(function App(props) {
           ...Ionicons.font,
           // eslint-disable-next-line global-require
           'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+          // eslint-disable-next-line global-require
           Roboto: require('native-base/Fonts/Roboto.ttf'),
+          // eslint-disable-next-line global-require
           Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
         });
 
@@ -68,21 +69,17 @@ export default observer(function App(props) {
     return null;
   }
 
-  console.log("checking logged in ", authStore.isLoggedIn);
-
   const screen = authStore.isLoggedIn ? (
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-    ) : (
+    <Stack.Screen name="Root" component={BottomTabNavigator} />
+  ) : (
     <Stack.Screen name="Login" component={LoginScreen} />
-    )
+  );
 
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-        <Stack.Navigator>
-          {screen}
-            </Stack.Navigator>
+        <Stack.Navigator>{screen}</Stack.Navigator>
       </NavigationContainer>
     </View>
   );
