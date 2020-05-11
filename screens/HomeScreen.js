@@ -28,7 +28,13 @@ function HomeScreen() {
     <Container>
       <List>
         {userStore.all().map(u => {
-          return <ListItem key={u.attributes.first_name}><Text>{u.attributes.first_name} {u.attributes.last_name}</Text></ListItem>;
+          return (
+            <ListItem key={u.attributes.first_name}>
+              <Text>
+                {u.attributes.first_name} {u.attributes.last_name}
+              </Text>
+            </ListItem>
+          );
         })}
       </List>
     </Container>

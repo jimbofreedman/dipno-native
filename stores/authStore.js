@@ -40,13 +40,13 @@ export default class AuthStore {
         backend: 'facebook',
         token: this.facebookToken,
       })
-      .then((data) => {
-        console.log("logged in");
+      .then(data => {
+        console.log('logged in');
         this.apiToken = data.access_token;
         return true;
       })
       .catch(() => {
-        console.log("not logged in");
+        console.log('not logged in');
         this.logout();
         return false;
       });

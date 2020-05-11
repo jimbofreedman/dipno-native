@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
-import {Container, Text, Button, Content} from 'native-base';
+import { Container, Text, Button, Content } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { observer } from 'mobx-react';
 import * as WebBrowser from 'expo-web-browser';
@@ -8,11 +8,9 @@ import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import useStores from '../useStores';
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({});
 
-});
-
-function TimePicker({time, update}) {
+function TimePicker({ time, update }) {
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
 
   const showDatePicker = () => {
@@ -23,49 +21,49 @@ function TimePicker({time, update}) {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
+  const handleConfirm = date => {
     update(date.toTimeString());
     hideDatePicker();
   };
 
-  return <Content>
-    <Button
-      title="Show Date Picker"
-      onPress={showDatePicker}
-    >
-      <Text>{time.toTimeString()}</Text>
-    </Button>
-    <DateTimePickerModal
-      isVisible={isDatePickerVisible}
-      date={time}
-      mode="time"
-      onConfirm={handleConfirm}
-      onCancel={hideDatePicker}
-    />
-  </Content>
-
+  return (
+    <Content>
+      <Button title="Show Date Picker" onPress={showDatePicker}>
+        <Text>{time.toTimeString()}</Text>
+      </Button>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        date={time}
+        mode="time"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+    </Content>
+  );
 }
 
 function AvailabilityScreen() {
   const { profileStore } = useStores();
 
-  const handleConfirmFrom = (time) => {
-    profileStore.all()[0].update({ attributes: {
-        available_from: time
+  const handleConfirmFrom = time => {
+    profileStore.all()[0].update({
+      attributes: {
+        available_from: time,
       },
     });
   };
 
-  const handleConfirmTo = (time) => {
-    profileStore.all()[0].update({ attributes: {
-        available_to: time
+  const handleConfirmTo = time => {
+    profileStore.all()[0].update({
+      attributes: {
+        available_to: time,
       },
     });
   };
 
   React.useEffect(() => {
     if (!profileStore.loading && !profileStore.error && !profileStore.all().length) {
-      profileStore.loadAll().then((d) => console.log('loaded profiles'));
+      profileStore.loadAll().then(d => console.log('loaded profiles'));
     }
   });
 
@@ -83,7 +81,9 @@ function AvailabilityScreen() {
   const strFrom = attributes.available_from
     ? `Thu, 01 Jan 1970 ${attributes.available_from.slice(0, 17)}`
     : null;
-  const strTo = attributes.available_to ? `Thu, 01 Jan 1970 ${attributes.available_to.slice(0, 17)}` : null;
+  const strTo = attributes.available_to
+    ? `Thu, 01 Jan 1970 ${attributes.available_to.slice(0, 17)}`
+    : null;
   const availableFrom = new Date(strFrom);
   const availableTo = new Date(strTo);
   console.log(strFrom, strTo);
