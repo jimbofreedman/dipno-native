@@ -67,14 +67,12 @@ class ApiSerice {
 
   // login/register
   async convertToken(params) {
-    console.log(params);
     const res = await this.apiCall(api.convert_token, 'POST', false, params);
     this.handleCommonError(res);
     return res.body;
   }
 
   async me(token) {
-    console.log(token);
     const res = await this.apiCall(api.me, 'GET', token);
     this.handleCommonError(res);
     return res.body;

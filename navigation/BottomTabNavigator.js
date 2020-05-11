@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import AvailabilityScreen from '../screens/AvailabilityScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -12,9 +12,9 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+      return 'Find Me A Buddy';
+    case 'Availability':
+      return 'Set My Availability';
     default:
       throw new Error('Unknown Route');
   }
@@ -32,16 +32,16 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          title: 'Find Buddies',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-contacts" />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Availability"
+        component={AvailabilityScreen}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          title: 'Availability',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clock" />,
         }}
       />
     </BottomTab.Navigator>

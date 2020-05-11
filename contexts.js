@@ -46,4 +46,5 @@ export default React.createContext({
   timerStore: new TimerStore(),
   authStore,
   userStore: new ResourceStore({ name: 'users', httpClient }),
+  profileStore: new ResourceStore({ name: 'profiles', httpClient }),
 });

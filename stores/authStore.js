@@ -66,16 +66,6 @@ export default class AuthStore {
         });
         this.apiToken = apiToken.access_token;
         this.facebookToken = token;
-        // // Get the user's name using Facebook's Graph API
-        // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        // const data = await response.json();
-        // console.log('Logged in!', `Hi ${data.name}!`);
-        // console.log(data);
-        // this.facebookId = data.id;
-        // this.facebookName = data.name;
-        // this.facebookToken = token;
-        // this.facebookExpires = expires;
-        // AsyncStorage.setItem('@dipno:facebookToken', token);
       } else {
         // type === 'cancel'
       }
