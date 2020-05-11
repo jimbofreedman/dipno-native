@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import AvailabilityScreen from '../screens/AvailabilityScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -15,6 +16,8 @@ function getHeaderTitle(route) {
       return 'Find Me A Buddy';
     case 'Availability':
       return 'Set My Availability';
+    case 'Settings':
+      return 'Settings';
     default:
       throw new Error('Unknown Route');
   }
@@ -42,6 +45,14 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'Availability',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clock" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-settings" />,
         }}
       />
     </BottomTab.Navigator>

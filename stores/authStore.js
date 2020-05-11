@@ -1,5 +1,6 @@
 import * as Facebook from 'expo-facebook';
 import { AsyncStorage } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 import { observable, action, computed } from 'mobx';
 
@@ -22,25 +23,33 @@ export default class AuthStore {
 
   constructor() {
     Facebook.setAutoInitEnabledAsync(true).then(() => {
-      Facebook.initializeAsync('461460001330325').then(() => {});
+      SecureStore.getItemAsync('facebookToken').then(t => {
+        this.facebookToken = t;
+        Facebook.initializeAsync('461460001330325').then(() => {});
+      });
     });
   }
 
   @action.bound async checkLoggedIn() {
-    this.facebookToken = await AsyncStorage.getItem('@dipno:facebookToken');
-    this.facebookExpires = await AsyncStorage.getItem('@dipno:facebookExpires');
-    if (!this.facebookToken) {
-      return false;
-    }
-
-    const response = await fetch(
-      `https://graph.facebook.com/me?access_token=${this.facebookToken}`
-    );
-    const data = await response.json();
-    this.facebookId = data.id;
-    this.facebookName = data.name;
-
-    return true;
+    apiService
+      .convertToken({
+        client_id: 'yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq',
+        client_secret:
+          'n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq',
+        grant_type: 'convert_token',
+        backend: 'facebook',
+        token: this.facebookToken,
+      })
+      .then((data) => {
+        console.log("logged in");
+        this.apiToken = data.access_token;
+        return true;
+      })
+      .catch(() => {
+        console.log("not logged in");
+        this.logout();
+        return false;
+      });
   }
 
   @action.bound
@@ -66,6 +75,7 @@ export default class AuthStore {
         });
         this.apiToken = apiToken.access_token;
         this.facebookToken = token;
+        SecureStore.setItemAsync('facebookToken', this.facebookToken);
       } else {
         // type === 'cancel'
       }
@@ -75,9 +85,8 @@ export default class AuthStore {
   }
 
   @action.bound async logout() {
-    this.facebookId = null;
-    this.facebookName = null;
-    await AsyncStorage.removeItem('@dipno:facebookToken');
-    await AsyncStorage.removeItem('@dipno:facebookExpires');
+    await SecureStore.deleteItemAsync('facebookToken');
+    this.facebookToken = null;
+    this.apiToken = null;
   }
 }
