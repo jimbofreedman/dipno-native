@@ -19,15 +19,14 @@ export default class AuthStore {
   @observable apiToken = null;
 
   @computed get isLoggedIn() {
-    console.log('iLI', this.apiToken);
     return this.apiToken !== null;
   }
 
   constructor() {
     Facebook.setAutoInitEnabledAsync(true).then(() => {
-      console.log('set auto init');
+
       Facebook.initializeAsync('461460001330325').then(() => {
-        console.log('initialized');
+
       });
     });
   }
@@ -35,15 +34,12 @@ export default class AuthStore {
   @action.bound async checkLoggedIn() {
     this.facebookToken = await AsyncStorage.getItem('@dipno:facebookToken');
     this.facebookExpires = await AsyncStorage.getItem('@dipno:facebookExpires');
-    console.log(this.facebookToken);
     if (!this.facebookToken) {
       return false;
     }
 
     const response = await fetch(`https://graph.facebook.com/me?access_token=${this.facebookToken}`);
     const data = await response.json();
-    console.log('Logged in!', `Hi ${data.name}!`);
-    console.log(data);
     this.facebookId = data.id;
     this.facebookName = data.name;
 
@@ -63,6 +59,7 @@ export default class AuthStore {
         permissions: ['public_profile'],
       });
       if (type === 'success') {
+        console.log("Logged into Facebook");
         const apiToken = await apiService.convertToken({
             "client_id": "yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq",
             "client_secret": "n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq",

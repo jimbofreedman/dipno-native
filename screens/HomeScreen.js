@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Button, Text } from 'native-base';
+import { Platform, StyleSheet } from 'react-native';
+import { Button, Text, Container, Content, List, ListItem } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 import { observer } from 'mobx-react';
@@ -133,57 +133,32 @@ function DevelopmentModeNotice() {
 function HomeScreen() {
   const { timerStore, authStore, userStore } = useStores();
 
+  React.useEffect(() => {
+    if (!userStore.loading && !userStore.loaded) {
+      userStore
+        .loadAll()
+        .then(data => console.log(data))
+        .catch(error => {
+          console.error(error.message);
+        });
+    }
+  });
 
-  userStore.loadAll()
-    .then(data => console.log(data))
-    .catch(error => { console.error(error.message )});
+  if (userStore.loading) {
+    return <Container>
+      <Content>
+        <Text>Loading...</Text>
+      </Content>
+
+    </Container>
+  }
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              // eslint-disable-next-line no-undef
-              __DEV__
-                ? // eslint-disable-next-line global-require
-                  require('../assets/images/robot-dev.png')
-                : // eslint-disable-next-line global-require
-                  require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Button rounded light onPress={timerStore.resetTimer}><Text>{`Seconds passed: ${timerStore.timer}`}</Text></Button>
-          <Button rounded light onPress={authStore.logout}><Text>Logout</Text></Button>
-
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
-    </View>
+    <Container>
+      <List>
+        {userStore.all().map((u) => <ListItem>{u.attributes.firstName}</ListItem>)}
+      </List>
+    </Container>
   );
 }
 
