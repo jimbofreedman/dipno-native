@@ -1,3 +1,5 @@
+import Constants from 'expo-constants';
+
 import api from '../api';
 import StorageService from './storageService';
 
@@ -6,7 +8,7 @@ import StorageService from './storageService';
  */
 class ApiSerice {
   constructor() {
-    this.api_url = 'http://localhost:8000';
+    this.api_url = Constants.manifest.extra.apiUrl;
   }
 
   /**

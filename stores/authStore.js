@@ -1,6 +1,7 @@
 import * as Facebook from 'expo-facebook';
 import { AsyncStorage } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
 
 import { observable, action, computed } from 'mobx';
 
@@ -33,9 +34,8 @@ export default class AuthStore {
   @action.bound async checkLoggedIn() {
     apiService
       .convertToken({
-        client_id: 'yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq',
-        client_secret:
-          'n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq',
+        client_id: Constants.manifest.extra.facebook.clientId,
+        client_secret: Constants.manifest.extra.facebook.clientSecret,
         grant_type: 'convert_token',
         backend: 'facebook',
         token: this.facebookToken,
@@ -66,9 +66,8 @@ export default class AuthStore {
       });
       if (type === 'success') {
         const apiToken = await apiService.convertToken({
-          client_id: 'yiY1DGCuMBiWTWMkP4mZDoksndxEUhJf6uDklbPq',
-          client_secret:
-            'n5AIxbyK366tlCMrhXuYWx80x9MDlSWAgJ6pZxD4TpNwfS6xAepqabAnsF4u9QkN93QC6fNhHuxUAn2ljOWBh9gm7WCF2IWkI8T8w6jPj9nzD89UVynXTjd1sQARFHUq',
+          client_id: Constants.manifest.extra.facebook.clientId,
+          client_secret: Constants.manifest.extra.facebook.clientSecret,
           grant_type: 'convert_token',
           backend: 'facebook',
           token,

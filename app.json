@@ -12,7 +12,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "dipno",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -25,7 +25,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "io.freedman.dipno",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "io.freedman.dipno",
+      "versionCode": 1
     }
   }
 }
