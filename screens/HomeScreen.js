@@ -1,48 +1,28 @@
 import * as React from 'react';
-import { Text, Container, Content, List, ListItem } from 'native-base';
+import {Text, Container, Content, List, ListItem, Button} from 'native-base';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 import useStores from '../useStores';
 
+import ListScreen from './ListScreen';
+import ProfileScreen from './ProfileScreen';
+
+const Stack = createStackNavigator();
+
 function HomeScreen() {
-  const { userStore } = useStores();
-
-  React.useEffect(() => {
-    if (!userStore.loading && !userStore.error && !userStore.all().length) {
-      userStore.loadAll();
-    }
-  });
-
-  if (userStore.loading) {
-    return (
-      <Container>
-        <Content>
-          <Text>Loading...</Text>
-        </Content>
-      </Container>
-    );
-  }
-
   return (
-    <Container>
-      <List>
-        {userStore.all().map(u => {
-          return (
-            <ListItem key={u.attributes.first_name}>
-              <Text>
-                {u.attributes.first_name} {u.attributes.last_name}
-              </Text>
-            </ListItem>
-          );
-        })}
-      </List>
-    </Container>
+    <Stack.Navigator>
+      <Stack.Screen name="List" component={ListScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+    </Stack.Navigator>
   );
 }
 
 HomeScreen.navigationOptions = {
-  header: null,
+
 };
 
 export default observer(HomeScreen);
