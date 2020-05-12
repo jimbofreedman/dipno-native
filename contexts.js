@@ -19,10 +19,10 @@ const httpClient = axios.create({
   },
 });
 
-httpClient.interceptors.request.use(request => {
-  console.log('Request:', request);
-  return request;
-});
+// httpClient.interceptors.request.use(request => {
+//   console.log('Request:', request);
+//   return request;
+// });
 
 httpClient.interceptors.request.use(config => {
   const finalChar = config.url[config.url.length - 1];
@@ -51,4 +51,5 @@ export default React.createContext({
   authStore,
   userStore: new ResourceStore({ name: 'users', httpClient }),
   profileStore: new ResourceStore({ name: 'profiles', httpClient }),
+  matchStore: new ResourceStore({ name: 'matches', httpClient }),
 });

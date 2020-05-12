@@ -86,8 +86,6 @@ function AvailabilityScreen() {
     : null;
   const availableFrom = new Date(strFrom);
   const availableTo = new Date(strTo);
-  console.log(strFrom, strTo);
-  console.log(availableFrom, availableTo);
 
   return (
     <Container>

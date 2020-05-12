@@ -6,7 +6,7 @@ import { toJS } from 'mobx';
 import useStores from '../useStores';
 
 function ListScreen({ navigation }) {
-  const { userStore, profileStore } = useStores();
+  const { userStore, profileStore, matchStore } = useStores();
 
   React.useEffect(() => {
     if (!userStore.loading && !userStore.error && !userStore.all().length) {
@@ -14,6 +14,9 @@ function ListScreen({ navigation }) {
     }
     if (!profileStore.loading && !profileStore.error && !profileStore.all().length) {
       profileStore.loadAll();
+    }
+    if (!matchStore.loading && !matchStore.error) {
+      matchStore.loadAll();
     }
   });
 
@@ -32,7 +35,6 @@ function ListScreen({ navigation }) {
     );
   }
 
-  console.log(profileStore.all().length);
   const myUserId = profileStore.all()[0].id;
 
   return (
@@ -67,7 +69,7 @@ function ListScreen({ navigation }) {
   );
 }
 
-HomeScreen.navigationOptions = {
+ListScreen.navigationOptions = {
   header: null,
 };
 

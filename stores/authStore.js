@@ -42,6 +42,7 @@ export default class AuthStore {
       })
       .then(data => {
         console.log('logged in');
+        console.log(data);
         this.apiToken = data.access_token;
         return true;
       })
@@ -65,21 +66,24 @@ export default class AuthStore {
         permissions: ['public_profile'],
       });
       if (type === 'success') {
-        const apiToken = await apiService.convertToken({
+        const params = {
           client_id: Constants.manifest.extra.facebook.clientId,
           client_secret: Constants.manifest.extra.facebook.clientSecret,
           grant_type: 'convert_token',
           backend: 'facebook',
           token,
-        });
+        };
+        console.log(params);
+        const apiToken = await apiService.convertToken(params);
         this.apiToken = apiToken.access_token;
         this.facebookToken = token;
         SecureStore.setItemAsync('facebookToken', this.facebookToken);
       } else {
         // type === 'cancel'
       }
-    } catch ({ message }) {
-      console.log(`Facebook Login Error: ${message}`);
+    } catch (error) {
+      console.log(`Facebook Login Error: ${error.message}`);
+      console.log(error);
     }
   }
 
