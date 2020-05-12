@@ -63,6 +63,8 @@ function ProfileScreen({ route }) {
   return (
     <Container>
       <Text>{userName}</Text>
+      <Text>I'd like to chat about:</Text>
+      <Text>{user.attributes.interests}</Text>
       <Button onPress={tryMatch} title="Match"><Text>Match</Text></Button>
     </Container>
   );
