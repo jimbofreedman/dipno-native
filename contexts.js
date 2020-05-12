@@ -19,10 +19,10 @@ const httpClient = axios.create({
   },
 });
 
-// httpClient.interceptors.request.use(request => {
-//   console.log('Request:', request);
-//   return request;
-// });
+httpClient.interceptors.request.use(request => {
+  console.log('Request:', request);
+  return request;
+});
 
 httpClient.interceptors.request.use(config => {
   const finalChar = config.url[config.url.length - 1];
@@ -40,7 +40,7 @@ httpClient.interceptors.request.use(config => {
 httpClient.interceptors.request.use(
   config => {
     // eslint-disable-next-line no-param-reassign
-    config.headers.Authorization = `Bearer facebook ${authStore.facebookToken}`;
+    config.headers.Authorization = `Token ${authStore.apiToken}`;
     return config;
   },
   error => Promise.reject(error)

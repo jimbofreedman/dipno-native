@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 
 import useStores from '../useStores';
+import { Linking } from 'expo';
 
 function ListScreen({ navigation }) {
   const { userStore, profileStore, matchStore } = useStores();
@@ -39,6 +40,48 @@ function ListScreen({ navigation }) {
 
   return (
     <Container>
+      <List>
+        {matchStore.all().map(m => {
+          const user1Id = m.relationships.user1.data.id;
+          if (user1Id === myUserId) {
+            return null;
+          }
+
+          const u = userStore.byId({ id: user1Id });
+          const userName = `${u.attributes.first_name} ${u.attributes.last_name.slice(0, 1)}.`;
+
+          const acceptMatch = () => {
+            m.update({ attributes: { accepted: true } });
+          };
+
+          const connectMatch = () => {
+            Linking.openURL(u.attributes.facebook_link);
+          };
+
+          const actionButton = m.attributes.accepted ? (
+            <Button onPress={connectMatch} title="Connect"><Text>Connect</Text></Button>
+          ) : (
+            <Button onPress={acceptMatch} title="Accept"><Text>Accept</Text></Button>
+        )
+          return (
+            <ListItem key={u.id}>
+              <Button
+                title={userName}
+                onPress={() => {
+                  navigation.navigate('Profile', {
+                    userId: u.id,
+                  });
+                }}
+              >
+                <Text>
+                  {userName}
+                </Text>
+              </Button>
+              {actionButton}
+            </ListItem>
+          );
+        })}
+      </List>
       <List>
         {userStore.all().map(u => {
           if (u.id === myUserId || !u.attributes.first_name) {

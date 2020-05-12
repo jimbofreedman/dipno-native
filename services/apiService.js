@@ -27,6 +27,7 @@ class ApiSerice {
     if (params) {
       payload.body = JSON.stringify(params);
     }
+    console.log(payload);
     const res = await fetch(`${this.api_url}${url}`, payload);
     const { status } = res;
     const body = await res.json();
@@ -41,7 +42,7 @@ class ApiSerice {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     if (token) {
-      headers.append('Authorization', `Bearer facebook ${token}`);
+      headers.append('Authorization', `Token ${token}`);
     }
     return headers;
   }

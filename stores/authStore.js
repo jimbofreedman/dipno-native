@@ -24,26 +24,22 @@ export default class AuthStore {
 
   constructor() {
     Facebook.setAutoInitEnabledAsync(true).then(() => {
-      SecureStore.getItemAsync('facebookToken').then(t => {
-        this.facebookToken = t;
-        Facebook.initializeAsync('461460001330325').then(() => {});
+      SecureStore.getItemAsync('apiToken').then(t => {
+        this.apiToken = t;
+        SecureStore.getItemAsync('facebookToken').then(t => {
+          this.facebookToken = t;
+          Facebook.initializeAsync('461460001330325').then(() => {
+          });
+        });
       });
     });
   }
 
   @action.bound async checkLoggedIn() {
     apiService
-      .convertToken({
-        client_id: Constants.manifest.extra.facebook.clientId,
-        client_secret: Constants.manifest.extra.facebook.clientSecret,
-        grant_type: 'convert_token',
-        backend: 'facebook',
-        token: this.facebookToken,
-      })
-      .then(data => {
+      .me(this.apiToken)
+      .then(() => {
         console.log('logged in');
-        console.log(data);
-        this.apiToken = data.access_token;
         return true;
       })
       .catch(() => {
@@ -63,7 +59,7 @@ export default class AuthStore {
         permissions,
         declinedPermissions, */
       } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile'],
+        permissions: ['public_profile', 'user_link'],
       });
       if (type === 'success') {
         const params = {
@@ -73,10 +69,11 @@ export default class AuthStore {
           backend: 'facebook',
           token,
         };
-        console.log(params);
+
         const apiToken = await apiService.convertToken(params);
-        this.apiToken = apiToken.access_token;
+        this.apiToken = apiToken.data.access_token;
         this.facebookToken = token;
+        SecureStore.setItemAsync('apiToken', this.apiToken);
         SecureStore.setItemAsync('facebookToken', this.facebookToken);
       } else {
         // type === 'cancel'
@@ -89,6 +86,7 @@ export default class AuthStore {
 
   @action.bound async logout() {
     await SecureStore.deleteItemAsync('facebookToken');
+    await SecureStore.deleteItemAsync('apiToken');
     this.facebookToken = null;
     this.apiToken = null;
   }
